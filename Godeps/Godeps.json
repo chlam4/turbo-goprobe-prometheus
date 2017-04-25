@@ -1,0 +1,55 @@
+{
+	"ImportPath": "github.com/chlam4/turbo-goprobe-prometheus",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/golang/glog",
+			"Rev": "44145f04b68cf362d9c4df2182967c2275eaefed"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "8616e8ee5e20a1704615e6c8d7afcdac06087a67"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-api/pkg/api",
+			"Rev": "31f61301fa26cd44681e9e0bd92d4cb0c8c17e84"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-api/pkg/client",
+			"Rev": "31f61301fa26cd44681e9e0bd92d4cb0c8c17e84"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/builder",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/mediationcontainer",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/probe",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/proto",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/service",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/supplychain",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "github.com/turbonomic/turbo-go-sdk/pkg/version",
+			"Rev": "4811c15abfd47ae905e4580fa9c850de6587cac7"
+		},
+		{
+			"ImportPath": "golang.org/x/net/websocket",
+			"Rev": "e90d6d0afc4c315a0d87a568ae68577cc15149a0"
+		}
+	]
+}
