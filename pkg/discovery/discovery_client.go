@@ -9,7 +9,7 @@ import (
 	"github.com/chlam4/turbo-goprobe-prometheus/pkg/registration"
 )
 
-// Discovery Client for the Example Probe
+// Discovery Client for the Prometheus Probe
 // Implements the TurboDiscoveryClient interface
 type PrometheusDiscoveryClient struct {
 	ClientConf *conf.PrometheusTargetConf

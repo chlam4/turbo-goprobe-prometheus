@@ -24,10 +24,10 @@ func (myProbe *PrometheusRegistrationClient) GetSupplyChainDefinition() []*proto
 	supplyChainFactory := &SupplyChainFactory{}
 	templateDtos, err := supplyChainFactory.CreateSupplyChain()
 	if err != nil {
-		glog.Infoln("[ExampleProbe] Error creating Supply chain for the example probe")
+		glog.Infoln("Error creating Supply chain for the Prometheus probe")
 		return nil
 	}
-	glog.Infoln("[ExampleProbe] Supply chain for the example probe is created.")
+	glog.Infoln("Supply chain for the Prometheus probe is created.")
 	return templateDtos
 }
 

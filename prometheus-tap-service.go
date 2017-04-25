@@ -22,9 +22,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Example Probe Registration Client
 	registrationClient := &registration.PrometheusRegistrationClient{}
-	// Example Probe Registration Client
 	discoveryClient, err := discovery.NewDiscoveryClient(targetConf)
 	if err != nil {
 		glog.Infof("Error while instantiating a discovery client at %v with config %v: %v\n", turboCommConf, targetConf, err)
