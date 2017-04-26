@@ -2,11 +2,13 @@ package discovery
 
 import (
 	"fmt"
-	"github.com/golang/glog"
-	"github.com/turbonomic/turbo-go-sdk/pkg/probe"
-	"github.com/turbonomic/turbo-go-sdk/pkg/proto"
 	"github.com/chlam4/turbo-goprobe-prometheus/pkg/conf"
 	"github.com/chlam4/turbo-goprobe-prometheus/pkg/registration"
+	"github.com/golang/glog"
+	"github.com/turbonomic/turbo-go-sdk/pkg/builder"
+	"github.com/turbonomic/turbo-go-sdk/pkg/probe"
+	"github.com/turbonomic/turbo-go-sdk/pkg/proto"
+	"github.com/turbonomic/turbo-go-sdk/pkg/supplychain"
 )
 
 // Discovery Client for the Prometheus Probe
@@ -60,8 +62,19 @@ func (handler *PrometheusDiscoveryClient) Validate(accountValues []*proto.Accoun
 // Discover the Target Topology
 func (handler *PrometheusDiscoveryClient) Discover(accountValues []*proto.AccountValue) (*proto.DiscoveryResponse, error) {
 	glog.Infof("========= Discovering Prometheus ============= %s\n", accountValues)
-	var discoveryResults []*proto.EntityDTO
-	var err error
+
+	respTimeCommodity, _ := builder.NewCommodityDTOBuilder(proto.CommodityDTO_RESPONSE_TIME).Create()
+	propertyNamespace := "DEFAULT"
+	propertyName := supplychain.SUPPLY_CHAIN_CONSTANT_IP_ADDRESS
+	ipAddress := "10.10.174.90"
+	appDto, err := builder.NewEntityDTOBuilder(proto.EntityDTO_APPLICATION, "https://10.10.172.235:9400/com.vmturbo.UI/UIMain.html").
+		DisplayName("OpsMgr-10.10.172.235").
+		SellsCommodity(respTimeCommodity).
+		WithProperty(&proto.EntityDTO_EntityProperty{
+			Namespace: &propertyNamespace,
+			Name:      &propertyName,
+			Value:     &ipAddress,
+		}).Create()
 
 	var discoveryResponse *proto.DiscoveryResponse
 	if err != nil {
@@ -78,7 +91,7 @@ func (handler *PrometheusDiscoveryClient) Discover(accountValues []*proto.Accoun
 	} else {
 		// No error. Return the result entityDTOs.
 		discoveryResponse = &proto.DiscoveryResponse{
-			EntityDTO: discoveryResults,
+			EntityDTO: []*proto.EntityDTO{appDto},
 		}
 	}
 	glog.Infof("Prometheus discovery response %s\n", discoveryResponse)
