@@ -33,10 +33,10 @@ func main() {
 		WithTurboCommunicator(communicator).
 		WithTurboProbe(probe.NewProbeBuilder(registration.TargetType, registration.ProbeCategory).
 			RegisteredBy(registrationClient).
-			DiscoversTarget(discoveryClient.ClientConf.Address, discoveryClient)).Create()
+			DiscoversTarget(discoveryClient.TargetConf.Address, discoveryClient)).Create()
 
 	if err != nil {
-		glog.Infof("Error while building turbo tap service on target %v: %v\n", discoveryClient.ClientConf.Address, err)
+		glog.Infof("Error while building turbo tap service on target %v: %v\n", discoveryClient.TargetConf.Address, err)
 		os.Exit(1)
 	}
 
