@@ -9,10 +9,12 @@ var (
 	vCpuType     = proto.CommodityDTO_VCPU
 	vMemType     = proto.CommodityDTO_VMEM
 	respTimeType = proto.CommodityDTO_RESPONSE_TIME
+	transactionType = proto.CommodityDTO_TRANSACTION
 
 	vCpuTemplateComm     *proto.TemplateCommodity = &proto.TemplateCommodity{CommodityType: &vCpuType}
 	vMemTemplateComm     *proto.TemplateCommodity = &proto.TemplateCommodity{CommodityType: &vMemType}
 	respTimeTemplateComm *proto.TemplateCommodity = &proto.TemplateCommodity{CommodityType: &respTimeType}
+	transactionTemplateComm *proto.TemplateCommodity = &proto.TemplateCommodity{CommodityType: &transactionType}
 )
 
 type SupplyChainFactory struct{}
@@ -43,7 +45,7 @@ func (factory *SupplyChainFactory) buildNodeSupplyBuilder() (*proto.TemplateDTO,
 func (factory *SupplyChainFactory) buildAppSupplyBuilder() (*proto.TemplateDTO, error) {
 	//create
 	appSupplyChainNodeBuilder := supplychain.NewSupplyChainNodeBuilder(proto.EntityDTO_APPLICATION).
-		Sells(respTimeTemplateComm)
+		Sells(respTimeTemplateComm).Sells(transactionTemplateComm)
 		//Provider(proto.EntityDTO_VIRTUAL_MACHINE, proto.Provider_HOSTING).
 		//Buys(vCpuTemplateComm).
 		//Buys(vMemTemplateComm)
