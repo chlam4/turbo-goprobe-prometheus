@@ -8,12 +8,13 @@ import (
 	"github.com/golang/glog"
 	prometheusHttpClient "github.com/prometheus/client_golang/api"
 	prometheus "github.com/prometheus/client_golang/api/prometheus/v1"
+	"github.com/prometheus/common/model"
 	"github.com/turbonomic/turbo-go-sdk/pkg/builder"
 	"github.com/turbonomic/turbo-go-sdk/pkg/probe"
 	"github.com/turbonomic/turbo-go-sdk/pkg/proto"
 	"github.com/turbonomic/turbo-go-sdk/pkg/supplychain"
+	"net/url"
 	"time"
-	"github.com/prometheus/common/model"
 )
 
 // Discovery Client for the Prometheus Probe
@@ -104,34 +105,39 @@ func (discClient *PrometheusDiscoveryClient) Discover(accountValues []*proto.Acc
 
 	propertyNamespace := "DEFAULT"
 	propertyName := supplychain.SUPPLY_CHAIN_CONSTANT_IP_ADDRESS
-	ipAddress := "10.10.174.90"
 	appType := "webdriver"
 	var entities []*proto.EntityDTO
 	for _, metric := range value.(model.Vector) {
 		respTimeCommodity, _ := builder.NewCommodityDTOBuilder(proto.CommodityDTO_RESPONSE_TIME).
-			Capacity(100.0).Used(float64(metric.Value)).Create()
+			Capacity(10.0).Used(float64(metric.Value)).Create()
 		//vcpuCommodity, _ := builder.NewCommodityDTOBuilder(proto.CommodityDTO_VCPU).Used(3.5).Create()
 		//vmemCommodity, _ := builder.NewCommodityDTOBuilder(proto.CommodityDTO_VMEM).Used(6.5).Create()
 
-		appDto, err := builder.NewEntityDTOBuilder(proto.EntityDTO_APPLICATION, metric.Metric.String()).
-			DisplayName(metric.Metric.String()).
+		entityName := string(metric.Metric["instance"])
+		entityUrl, err := url.Parse(entityName)
+		if err != nil {
+			glog.Errorf("Error extracting the instance URL from metric %v: %s", metric, err)
+			continue
+		}
+		ipAddress := entityUrl.Hostname()	// TODO perform DNS lookup here
+		appDto, err := builder.NewEntityDTOBuilder(proto.EntityDTO_APPLICATION, entityName).
+			DisplayName(entityName).
 			SellsCommodity(respTimeCommodity).
-			//Provider(builder.CreateProvider(proto.EntityDTO_VIRTUAL_MACHINE, "420b1ddf-b89b-69cf-e849-863fe800e546")).
-			//BuysCommodities([]*proto.CommodityDTO{vcpuCommodity, vmemCommodity}).
 			ApplicationData(&proto.EntityDTO_ApplicationData{
-			Type:      &appType,
-			IpAddress: &ipAddress,
-		}).
+				Type:      &appType,
+				IpAddress: &ipAddress,
+			}).
 			WithProperty(&proto.EntityDTO_EntityProperty{
-			Namespace: &propertyNamespace,
-			Name:      &propertyName,
-			Value:     &ipAddress,
-		}).Create()
+				Namespace: &propertyNamespace,
+				Name:      &propertyName,
+				Value:     &ipAddress,
+			}).Create()
+
 		if err != nil {
 			glog.Errorf("Error building EntityDTO from metric %v: %s", metric, err)
-		} else {
-			entities = append(entities, appDto)
+			continue
 		}
+		entities = append(entities, appDto)
 	}
 	discoveryResponse := &proto.DiscoveryResponse{
 		EntityDTO: entities,
