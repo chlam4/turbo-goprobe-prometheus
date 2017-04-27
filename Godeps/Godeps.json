@@ -12,6 +12,20 @@
 			"Rev": "8616e8ee5e20a1704615e6c8d7afcdac06087a67"
 		},
 		{
+			"ImportPath": "github.com/prometheus/client_golang/api",
+			"Comment": "v0.8.0-75-g7d94842",
+			"Rev": "7d9484283ebefa862b5b7727d4344cfdf9a0d138"
+		},
+		{
+			"ImportPath": "github.com/prometheus/client_golang/api/prometheus/v1",
+			"Comment": "v0.8.0-75-g7d94842",
+			"Rev": "7d9484283ebefa862b5b7727d4344cfdf9a0d138"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/model",
+			"Rev": "9e0844febd9e2856f839c9cb974fbd676d1755a8"
+		},
+		{
 			"ImportPath": "github.com/turbonomic/turbo-api/pkg/api",
 			"Rev": "31f61301fa26cd44681e9e0bd92d4cb0c8c17e84"
 		},
