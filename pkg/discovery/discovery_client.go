@@ -13,7 +13,6 @@ import (
 	"github.com/turbonomic/turbo-go-sdk/pkg/probe"
 	"github.com/turbonomic/turbo-go-sdk/pkg/proto"
 	"github.com/turbonomic/turbo-go-sdk/pkg/supplychain"
-	"net/url"
 	"time"
 )
 
@@ -85,7 +84,7 @@ func (discClient *PrometheusDiscoveryClient) Discover(accountValues []*proto.Acc
 	var entities []*proto.EntityDTO
 
 	for query, action := range Blueprint {
-		value, err := discClient.PrometheusApi.Query(context.Background(), query, time.Now())
+		value, err := discClient.PrometheusApi.Query(context.Background(), string(query), time.Now())
 		if err != nil {
 			glog.Errorf("Error while discovering Prometheus target %s: %s\n", discClient.TargetConf.Address, err)
 			// If there is error during discovery, return an ErrorDTO.
@@ -104,39 +103,43 @@ func (discClient *PrometheusDiscoveryClient) Discover(accountValues []*proto.Acc
 		propertyNamespace := "DEFAULT"
 		propertyName := supplychain.SUPPLY_CHAIN_CONSTANT_IP_ADDRESS
 		for _, metric := range value.(model.Vector) {
-			respTimeCommodity, _ := builder.NewCommodityDTOBuilder(action.CommodityType).
-				Capacity(action.Capacity).Used(float64(metric.Value)).Create()
-			//vcpuCommodity, _ := builder.NewCommodityDTOBuilder(proto.CommodityDTO_VCPU).Used(3.5).Create()
-			//vmemCommodity, _ := builder.NewCommodityDTOBuilder(proto.CommodityDTO_VMEM).Used(6.5).Create()
-
-			entityName := string(metric.Metric["instance"])
-			entityUrl, err := url.Parse(entityName)
+			//
+			// Extract entity id and node IP from the metric
+			//
+			instanceName := string(metric.Metric["instance"])
+			appData, err := action.GetAppData(instanceName)
 			if err != nil {
-				glog.Errorf("Error extracting the instance URL from metric %v: %s", metric, err)
+				glog.Errorf("Error extracting id and node IP info from metric %v: %s", metric, err)
 				continue
 			}
-			if (action.AppType != AppType_Web) {
-				entityName = action.AppType + "_" + entityUrl.Hostname()
+			//
+			// Construct the commodity
+			//
+			commodity, err := builder.NewCommodityDTOBuilder(action.CommodityType).
+				Capacity(action.Capacity).Used(float64(metric.Value)).Create()
+			if err != nil {
+				glog.Errorf("Error building a commodity: %s", err)
+				continue
 			}
-			ipAddress := entityUrl.Hostname() // TODO perform DNS lookup here
-			appDto, err := builder.NewEntityDTOBuilder(proto.EntityDTO_APPLICATION, entityName).
-				DisplayName(entityName).
-				SellsCommodity(respTimeCommodity).
+
+			dto, err := builder.NewEntityDTOBuilder(proto.EntityDTO_APPLICATION, appData.id).
+				DisplayName(appData.id).
+				SellsCommodity(commodity).
 				ApplicationData(&proto.EntityDTO_ApplicationData{
-					Type:      &action.AppType,
-					IpAddress: &ipAddress,
+					Type:      &appData.appType,
+					IpAddress: &appData.nodeIp,
 				}).
 				WithProperty(&proto.EntityDTO_EntityProperty{
 					Namespace: &propertyNamespace,
 					Name:      &propertyName,
-					Value:     &ipAddress,
+					Value:     &appData.nodeIp,
 				}).Create()
 
 			if err != nil {
 				glog.Errorf("Error building EntityDTO from metric %v: %s", metric, err)
 				continue
 			}
-			entities = append(entities, appDto)
+			entities = append(entities, dto)
 		}
 	}
 
