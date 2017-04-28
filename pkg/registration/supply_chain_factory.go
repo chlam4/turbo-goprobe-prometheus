@@ -44,8 +44,8 @@ func (factory *SupplyChainFactory) buildNodeSupplyBuilder() (*proto.TemplateDTO,
 
 func (factory *SupplyChainFactory) buildAppSupplyBuilder() (*proto.TemplateDTO, error) {
 	//create
-	appSupplyChainNodeBuilder := supplychain.NewSupplyChainNodeBuilder(proto.EntityDTO_APPLICATION).
-		Sells(respTimeTemplateComm).Sells(transactionTemplateComm)
+	appSupplyChainNodeBuilder := supplychain.NewSupplyChainNodeBuilder(proto.EntityDTO_APPLICATION)
+		//Sells(respTimeTemplateComm).Sells(transactionTemplateComm)
 		//Provider(proto.EntityDTO_VIRTUAL_MACHINE, proto.Provider_HOSTING).
 		//Buys(vCpuTemplateComm).
 		//Buys(vMemTemplateComm)
