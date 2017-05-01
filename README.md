@@ -11,6 +11,7 @@ and the [mysql](https://github.com/prometheus/mysqld_exporter) exporters.  More 
 discovered by the Turbo OpsMgr.
 
 To try it out:
+
 0. Prerequisites:
   * Install your Turbonomic OpsMgr.  The probe as of currently has been tested against version 5.9.
   * Install your Prometheus server and supported exporters (as listed above).
