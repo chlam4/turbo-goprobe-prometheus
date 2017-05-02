@@ -29,7 +29,7 @@ type Action struct {
 var Blueprint = map[Query]Action{
 	"(navigation_timing_response_end_seconds-navigation_timing_request_start_seconds)*1000": {
 		CommodityType: proto.CommodityDTO_RESPONSE_TIME,
-		Capacity:      10,
+		Capacity:      20,
 		GetAppData: func(instanceName string) (AppData, error) {
 			entityUrl, err := url.Parse(instanceName)
 			if err != nil {
@@ -38,7 +38,7 @@ var Blueprint = map[Query]Action{
 			}
 			appData := AppData{
 				appType: AppType_Web,
-				id:      AppType_Web + "_" + entityUrl.Hostname(),
+				id:      AppType_Web + "_" + entityUrl.Hostname() + ":" + entityUrl.Port(),
 				nodeIp:  entityUrl.Hostname(), // TODO perform DNS lookup here
 			}
 			return appData, nil
@@ -46,7 +46,7 @@ var Blueprint = map[Query]Action{
 	},
 	"rate(mysql_global_status_queries[5m])": {
 		CommodityType: proto.CommodityDTO_TRANSACTION,
-		Capacity:      100,
+		Capacity:      20,
 		GetAppData: func(instanceName string) (AppData, error) {
 			nodeIp := strings.Split(instanceName, ":")[0]
 			return AppData{
