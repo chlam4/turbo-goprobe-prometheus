@@ -3,8 +3,8 @@ package discovery
 import (
 	"context"
 	"fmt"
-	"github.com/chlam4/turbo-goprobe-prometheus/pkg/conf"
-	"github.com/chlam4/turbo-goprobe-prometheus/pkg/registration"
+	"github.com/turbonomic/turbo-goprobe-prometheus/pkg/conf"
+	"github.com/turbonomic/turbo-goprobe-prometheus/pkg/registration"
 	"github.com/golang/glog"
 	prometheusHttpClient "github.com/prometheus/client_golang/api"
 	prometheus "github.com/prometheus/client_golang/api/prometheus/v1"

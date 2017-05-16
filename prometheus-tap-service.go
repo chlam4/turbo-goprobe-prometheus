@@ -6,8 +6,8 @@ import (
 	"github.com/golang/glog"
 	"github.com/turbonomic/turbo-go-sdk/pkg/probe"
 	"github.com/turbonomic/turbo-go-sdk/pkg/service"
-	"github.com/chlam4/turbo-goprobe-prometheus/pkg/registration"
-	"github.com/chlam4/turbo-goprobe-prometheus/pkg/discovery"
+	"github.com/turbonomic/turbo-goprobe-prometheus/pkg/registration"
+	"github.com/turbonomic/turbo-goprobe-prometheus/pkg/discovery"
 )
 
 func main() {

@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/chlam4/turbo-goprobe-prometheus",
+	"ImportPath": "github.com/turbonomic/turbo-goprobe-prometheus",
 	"GoVersion": "go1.8",
 	"GodepVersion": "v79",
 	"Deps": [
