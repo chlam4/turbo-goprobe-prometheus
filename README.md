@@ -1,8 +1,7 @@
 # turbo-goprobe-prometheus
 
-This is a prototype GO SDK probe developed for the Turbonomic Operations Manager.  This probe aims to discover
-applications and nodes from [Prometheus](https://prometheus.io/).  It is being developed actively and please expect a
-lot of changes.
+This is a GO SDK probe that aims to discover applications and nodes from [Prometheus](https://prometheus.io/) for the
+Turbonomic Operations Manager.  This probe is of **_prototype_** quality at the moment.
 
 As of currently, this probe supports:
 * Creating Application entities based on the Prometheus [webdriver](https://github.com/mattbostock/webdriver_exporter)
